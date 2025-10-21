@@ -1,6 +1,6 @@
 import react from "react";
+export default function VerseDisplay({title, }){
 
-export default function WidgetPreview({navigation}){
     return(
         <></>
     )

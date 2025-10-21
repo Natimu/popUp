@@ -3,8 +3,9 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import HomeScreen from "../screens/HomeScreen";
 import WidgetSettingsScreen from "../screens/WidgetSettingsScreen";
 import FavoritesScreen from "../screens/FavoritesScreen";
-import VerseSourceScreen from "../screens/verseSourceScreen";
 import OnboardingScreen from "../screens/OnboardingScreen";
+import WidgetPreview from "../components/WidgetPreview"
+
 
 const Stack = createNativeStackNavigator();
 
@@ -13,7 +14,9 @@ export default function AppNavigator() {
     <Stack.Navigator initialRouteName="Home">
       <Stack.Screen name="Onboarding" component={OnboardingScreen} />
       <Stack.Screen name="Home" component={HomeScreen} />
-      
+      <Stack.Screen name="Widget Settings" component={WidgetSettingsScreen} />
+      <Stack.Screen name="Favorites" component={FavoritesScreen} />
+      <Stack.Screen name="Widget Preview" component={WidgetPreview}/>
     </Stack.Navigator>
   );
 }
