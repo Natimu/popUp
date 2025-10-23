@@ -8,11 +8,11 @@ export default function HomeScreen({ navigation }) {
   const [menuVisible, setMenuVisible] = useState(false);
 
   const cards = [
-    { title: "Bible Verse", quote: "Be still, and know that I am God.", background: null },
-    { title: "Motivational Quote", quote: "Faith is taking the first step even when you don’t see the whole staircase.", background: null },
-    { title: "Wisdom", quote: "Trust in the Lord with all your heart.", background: null },
-    { title: "Hope", quote: "With God all things are possible.", background: null },
-    { title: "Peace", quote: "Let the peace of Christ rule in your hearts.", background: null },
+    { title: "Bible Verse", type: "BIBLE", quote: "Be still, and know that I am God.", background: null },
+    { title: "Motivational Quote", type: "MOTIVATION", quote: "Faith is taking the first step even when you don’t see the whole staircase.", background: null },
+    { title: "Wisdom", type: "WISDOM", quote: "Trust in the Lord with all your heart.", background: null },
+    { title: "Hope", type: "GENERAL", quote: "With God all things are possible.", background: null },
+    { title: "Peace", type: "GENERAL", quote: "Let the peace of Christ rule in your hearts.", background: null },
   ];
 
   return (
@@ -29,7 +29,9 @@ export default function HomeScreen({ navigation }) {
             title={card.title}
             quote={card.quote}
             background={card.background}
-            onCustomize={() => console.log("Customize", card.title)}
+            onCustomize={() => 
+              navigation.navigate("Quote Library", {type: card.type, title: card.title})
+            }
             
           />
         ))}

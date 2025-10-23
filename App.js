@@ -2,12 +2,18 @@ import React from "react";
 import { View, ScrollView, StyleSheet } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import AppNavigator from "./src/navigation/AppNavigator";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+const queryClient = new QueryClient();
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <AppNavigator/>
-    </NavigationContainer>
+    <QueryClientProvider client={queryClient}>
+      <NavigationContainer>
+        <AppNavigator/>
+      </NavigationContainer>
+    </QueryClientProvider>
+    
      
   );
 }

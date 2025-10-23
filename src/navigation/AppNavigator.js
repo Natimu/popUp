@@ -5,6 +5,7 @@ import WidgetSettingsScreen from "../screens/WidgetSettingsScreen";
 import FavoritesScreen from "../screens/FavoritesScreen";
 import OnboardingScreen from "../screens/OnboardingScreen";
 import WidgetPreview from "../components/WidgetPreview"
+import QuoteLibraryScreen from "../screens/QuoteLibraryScreen";
 
 
 const Stack = createNativeStackNavigator();
@@ -17,6 +18,8 @@ export default function AppNavigator() {
       <Stack.Screen name="Widget Settings" component={WidgetSettingsScreen} />
       <Stack.Screen name="Favorites" component={FavoritesScreen} />
       <Stack.Screen name="Widget Preview" component={WidgetPreview}/>
+      <Stack.Screen name= "Quote Library" component={QuoteLibraryScreen}/>
+
     </Stack.Navigator>
   );
 }
