@@ -7,9 +7,6 @@ export async function fetchQuotes(type){
     if (!response.ok) throw new Error ("Network error");
     const data = await response.json();
 
-    console.log("API TYPE:", type);
-  console.log("RAW RESPONSE:", JSON.stringify(data, null, 2));
-
   switch (type){
     case "BIBLE":
         return[
@@ -26,9 +23,4 @@ export async function fetchQuotes(type){
             by: `${q.a}`,
         }));
   }
-
-    /*return data.results?.map((q, index) => ({
-        id: q._id || index,
-        text: q.content || q.text || q.quote || "",
-    })) || [];*/
 }

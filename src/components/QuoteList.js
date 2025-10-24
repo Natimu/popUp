@@ -1,6 +1,8 @@
 import React from "react";
 import {FlatList, StyleSheet} from "react-native";
 import QuoteLibraryQuoteCard from "./QuoteLibraryQuoteCard";
+
+
 export default function QuoteList({quotes, category}){
 
     return(
