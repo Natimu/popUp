@@ -1,9 +1,10 @@
 import React from "react";
 import {FlatList, StyleSheet} from "react-native";
 import QuoteLibraryQuoteCard from "./QuoteLibraryQuoteCard";
+import { View, ActivityIndicator } from "react-native";
 
 
-export default function QuoteList({quotes, category}){
+export default function QuoteList({quotes, category, onEndReached, loadingMore}){
 
     return(
         <FlatList
@@ -13,6 +14,15 @@ export default function QuoteList({quotes, category}){
             renderItem={({item})=> (
                 <QuoteLibraryQuoteCard quote={item.text} by={item.by}/>
             )}
+            onEndReached={onEndReached}
+            onEndReachedThreshold={0.1}
+            ListFooterComponent={
+                loadingMore ? (
+                    <View style={{padding:20}}>
+                        <ActivityIndicator size="small" color="black"/>
+                    </View>
+                ) : null
+            }
         />
     )
 }

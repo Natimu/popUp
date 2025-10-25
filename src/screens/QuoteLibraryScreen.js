@@ -4,15 +4,22 @@ import { useRoute } from "@react-navigation/native";
 import SideMenu from "../components/SideMenu";
 import AppHeader from "../components/AppHeader";
 import useQuotes from "../hooks/useQuotes";
-import QuoteList from "../components/QuoteList";
+import QuoteList from "../components/QuoteLists";
 
 export default function QuoteLibraryScreen({navigation}){
     const route = useRoute();
     const {type, title} = route.params;
     const [menuVisible, setMenuVisible] = useState(false);
-
-    const {data, isLoading, error} = useQuotes(type);
     
+    const {data, 
+        isLoading, 
+        error,
+        fetchNextPage,
+        hasNextPage,
+        isFetchingNexPage,
+    } = useQuotes(type);
+
+    const quotes = data ? data.pages.flat() : [];
 
     if (isLoading){
         return(
@@ -35,7 +42,11 @@ export default function QuoteLibraryScreen({navigation}){
             <AppHeader onMenuPress={() => {
                 setMenuVisible(true)}}
                 headerText={title}/>
-            <QuoteList quotes={data} category={type} />
+            <QuoteList 
+                quotes={quotes} 
+                category={type} 
+                onEndReached = {() => hasNextPage &&  fetchNextPage()}
+                loadingMore = {isFetchingNexPage}/>
 
             <SideMenu
                 visible={menuVisible}
