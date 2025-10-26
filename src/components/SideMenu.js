@@ -7,8 +7,19 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 const {width} = Dimensions.get("window");
 
+
+
 export default function SideMenu({ visible, onClose, navigation }) {
     const slideAnim = React.useRef(new Animated.Value(width)).current;
+
+    const handelNavigate = (route) =>{
+    const currentRoute = navigation.getState().routes[navigation.getState().index].name;
+      if (currentRoute !== route) navigation.navigate(route);
+      onClose();
+
+    };
+
+
 
   React.useEffect(() => {
     Animated.timing(slideAnim, {
@@ -18,51 +29,71 @@ export default function SideMenu({ visible, onClose, navigation }) {
     }).start();
   }, [visible]);
   return (
-    <Animated.View
-      pointerEvents={visible ? "auto" : "none"}
-      style={[
-        styles.menuContainer,
-        { transform: [{ translateX: slideAnim }] },
-      ]}
-    >
-        <View style={styles.menuContent}>
-        <TouchableOpacity onPress={onClose}>
-          <Text style={styles.close}>×</Text>
-        </TouchableOpacity>
+    visible &&(
+      <View style = {styles.overlay}>
+        <TouchableOpacity style={styles.backdrop} onPress={onClose} activeOpacity={1}/>
+        <Animated.View
+          pointerEvents={visible ? "auto" : "none"}
+          style={[
+            styles.menuContainer,
+            { transform: [{ translateX: slideAnim }] },
+          ]}
+        >
+          <View style={styles.menuContent}>
+            <TouchableOpacity onPress={onClose}>
+              <Text style={styles.close}>×</Text>
+            </TouchableOpacity>
 
-       
-        <TouchableOpacity style={styles.menuList} onPress={onClose}>
-            <Ionicons name="home" size={20} color={"black"}/>
-            <Text style={styles.menuItem}>Home</Text>
-        </TouchableOpacity>
-        
-        <TouchableOpacity style={styles.menuList} onPress={() => navigation.navigate("Favorites")}>
-            <Ionicons name="heart" size={20} color={"#ea6363ff"}/>
-          <Text style={styles.menuItem}>Favorites</Text>
-        </TouchableOpacity>
-        
-        <TouchableOpacity style={styles.menuList} onPress={() => navigation.navigate("Widget Preview")}>
-            <MaterialIcons name="settings-display" size={20} color={"#111415ff"}/>
-          <Text style={styles.menuItem}>Widget Display</Text>
-        </TouchableOpacity>
+          
+            <TouchableOpacity style={styles.menuList} onPress={() => handelNavigate("Home")}>
+                <Ionicons name="home" size={20} color={"black"}/>
+                <Text style={styles.menuItem}>Home</Text>
+            </TouchableOpacity>
+            
+            <TouchableOpacity style={styles.menuList} onPress={() => handelNavigate("Favorites")}>
+                <Ionicons name="heart" size={20} color={"#ea6363ff"}/>
+              <Text style={styles.menuItem}>Favorites</Text>
+            </TouchableOpacity>
+            
+            <TouchableOpacity style={styles.menuList} onPress={() => handelNavigate("Favorites")}>
+                <MaterialIcons name="settings-display" size={20} color={"#111415ff"}/>
+              <Text style={styles.menuItem}>Widget Display</Text>
+            </TouchableOpacity>
 
-        <TouchableOpacity style={styles.menuList} onPress={() => navigation.navigate("Widget Settings")}>
-            <Ionicons name="settings-outline" size={20} color={"#111415ff"}/>
-          <Text style={styles.menuItem}>Widget Settings</Text>
-        </TouchableOpacity>
-        
-        <TouchableOpacity style={styles.menuList} onPress={() => navigation.navigate("VerseSource")}>
-            <SimpleLineIcons name="question" size={20} color={"#111415ff"}/>
-          <Text style={styles.menuItem}>About</Text>
-        </TouchableOpacity>
-        
-        
+            <TouchableOpacity style={styles.menuList} onPress={() => handelNavigate("Widget Settings")}>
+                <Ionicons name="settings-outline" size={20} color={"#111415ff"}/>
+              <Text style={styles.menuItem}>Widget Settings</Text>
+            </TouchableOpacity>
+            
+            <TouchableOpacity style={styles.menuList} onPress={() => handelNavigate("VerseSource")}>
+                <SimpleLineIcons name="question" size={20} color={"#111415ff"}/>
+              <Text style={styles.menuItem}>About</Text>
+            </TouchableOpacity>
+          </View>
+      </Animated.View>
       </View>
-    </Animated.View>
+      
+
+    )
+    
   );
 }
 
 const styles = StyleSheet.create({
+  overlay: {
+    position: "absolute",
+    top: 0,
+    left: 0,
+    width: "100%",
+    height: "100%",
+    backgroundColor: "rgba(0,0,0,0.3)",
+  },
+  backdrop: {
+    position: "absolute",
+    width: "100%",
+    height: "100%",
+  },
+
   menuContainer: {
     position: "absolute",
     top: 0,

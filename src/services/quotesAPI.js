@@ -24,8 +24,6 @@ export async function fetchQuotes(type, count){
         data = await response.json();
     }
     
-    
-
   switch (type){
     case "BIBLE":
         return data.map((q, index) => (

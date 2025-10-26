@@ -15,7 +15,7 @@ export default function QuoteList({quotes, category, onEndReached, loadingMore})
                 <QuoteLibraryQuoteCard quote={item.text} by={item.by}/>
             )}
             onEndReached={onEndReached}
-            onEndReachedThreshold={0.1}
+            onEndReachedThreshold={0.5}
             ListFooterComponent={
                 loadingMore ? (
                     <View style={{padding:20}}>
