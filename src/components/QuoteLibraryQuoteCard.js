@@ -1,12 +1,32 @@
 // src/components/QuoteCard.js
 import { Ionicons, Feather, AntDesign } from "@expo/vector-icons";
 import React, { useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, ImageBackground, Share } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, ImageBackground, Share, Modal, TextInput,FlatList } from "react-native";
 import * as Clipboard from "expo-clipboard";
 import * as Speech from "expo-speech";
 
 export default function QuoteLibraryQuoteCard({ quote, by, background, onCustomize }) {
   const [liked, setLiked] = useState(false);
+  const [folders, setFolders] = useState([])
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [creating, setCreating] = useState(false);
+  const [folderName, setFolderName] = useState("");
+
+
+   const createFolder = () =>{
+    if(!folderName.trim()) return;
+    const newFolder = { id: Date.now(), name: folderName, quote: []};
+    setFolders([...folders, newFolder]);
+    setFolderName("");
+    setCreating(false);
+    };
+
+   const saveToFolder = (folder) => {
+      const updated = folders.map((f) => 
+      f.id === folder.id ? {...f,quotes: [...f.quote, {quote, by}]} : f);
+      setFolders(updated);
+      setModalVisible(false);
+   }
 
   const handelShare = async (quoteText, author) => {
         try{
@@ -26,11 +46,11 @@ export default function QuoteLibraryQuoteCard({ quote, by, background, onCustomi
   const handelSpeak = (quoteText, author) => {
     const textToRead = `"${quoteText}" - ${author}`;
     Speech.speak(textToRead, {
-      rate: 1.0,
+      rate: 0.8,
       pitch: 1.0,
       language: "en-US",
     })
-  }
+  };
 
   return (
     <TouchableOpacity onPress={onCustomize} style={styles.cardContainer}>
@@ -41,6 +61,8 @@ export default function QuoteLibraryQuoteCard({ quote, by, background, onCustomi
       >
         <Text style={styles.quote}>"{quote}"</Text>
         <Text style={styles.by}>{by}</Text>
+
+       {/* action buttons */}
         <View style={styles.actionBar}>
           <TouchableOpacity onPress={() => setLiked(!liked)}>
             <Ionicons 
@@ -61,10 +83,73 @@ export default function QuoteLibraryQuoteCard({ quote, by, background, onCustomi
             <AntDesign name="sound" size={20} color={"#333"}/>
             <Text>Play</Text>
           </TouchableOpacity>
-          <TouchableOpacity >
+          <TouchableOpacity onPress={() => setModalVisible(true)}>
             <Ionicons name="add" size={20} color={"#333"}/>
             <Text>Add</Text>
           </TouchableOpacity>
+
+          {/* adding to folder modal */}
+          <Modal
+            visible={isModalVisible} 
+            animationType="slide"
+            transparent
+            onRequestClose={() => setModalVisible(false)} >
+              <View style={styles.modalOverlay}>
+                <View style={styles.modalContent}>
+                  <Text style ={styles.modalTitle}>Save to Folder</Text>
+                  {!creating ? (
+                      <>
+                        {folders.length > 0 ? (
+                          <FlatList
+                            data={folders}
+                            keyExtractor={(item) => item.id.toString()}
+                            renderItem={({ item }) => (
+                              <TouchableOpacity
+                                style={styles.folderItem}
+                                onPress={() => saveToFolder(item)}
+                              >
+                                <Feather name="folder" size={18} color="#555" />
+                                <Text style={styles.folderName}>{item.name}</Text>
+                              </TouchableOpacity>
+                            )}
+                          />
+                        ) : (
+                          <Text style={styles.emptyText}>
+                            No folders yet — create one below.
+                          </Text>
+                        )}
+
+                        <TouchableOpacity
+                          style={styles.createNewBtn}
+                          onPress={() => setCreating(true)}
+                        >
+                          <Ionicons name="add-circle-outline" size={18} color="#333" />
+                          <Text style={styles.createNewText}>Create New Folder</Text>
+                        </TouchableOpacity>
+                      </>
+                    ) : (
+                      <View>
+                        <TextInput
+                          value={folderName}
+                          onChangeText={setFolderName}
+                          placeholder="Enter folder name..."
+                          style={styles.input}
+                        />
+                        <TouchableOpacity style={styles.saveBtn} onPress={createFolder}>
+                          <Text style={styles.saveBtnText}>Save Folder</Text>
+                        </TouchableOpacity>
+                      </View>
+                    )}
+
+                    <TouchableOpacity
+                      style={styles.closeBtn}
+                      onPress={() => setModalVisible(false)}
+                    >
+                      <Text style={styles.closeText}>Close</Text>
+                    </TouchableOpacity>
+                </View>
+              </View>
+            </Modal>
         </View>
       </ImageBackground>
     </TouchableOpacity>
@@ -105,5 +190,39 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     borderTopWidth: 0.5,
     borderColor: "#ccc",
-  }
+  },
+  modalOverlay: {
+    flex: 1,
+    justifyContent: "flex-end",
+    backgroundColor: "rgba(0,0,0,0.3)",
+  },
+  modalContent: {
+    backgroundColor: "#fff",
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    padding: 20,
+    height: "50%",
+  },
+  modalTitle: { fontSize: 18, fontWeight: "bold", marginBottom: 12 },
+  folderItem: { flexDirection: "row", alignItems: "center", marginBottom: 10 },
+  folderName: { marginLeft: 8, fontSize: 16, color: "#333" },
+  emptyText: { textAlign: "center", color: "#777", marginTop: 20 },
+  createNewBtn: { flexDirection: "row", alignItems: "center", marginTop: 20 },
+  createNewText: { marginLeft: 6, color: "#333", fontSize: 15 },
+  input: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 8,
+    padding: 8,
+    marginVertical: 12,
+  },
+  saveBtn: {
+    backgroundColor: "#4CAF50",
+    padding: 10,
+    borderRadius: 8,
+    alignItems: "center",
+  },
+  saveBtnText: { color: "#fff", fontWeight: "bold" },
+  closeBtn: { alignSelf: "center", marginTop: 12 },
+  closeText: { color: "#555" },
 });
