@@ -11,23 +11,16 @@ export default function QuoteLibraryQuoteCard({ quote, by, background, onCustomi
   const [isModalVisible, setModalVisible] = useState(false);
   const [creating, setCreating] = useState(false);
   const [folderName, setFolderName] = useState("");
-  const { folders, setFolder } = useContext(FoldersContext);
+  const { folders, setFolders, handelLike, addQuoteToFolder, removeQuoteFromFolder } = useContext(FoldersContext);
 
 
    const createFolder = () =>{
     if(!folderName.trim()) return;
-    const newFolder = { id: Date.now(), name: folderName, quote: []};
-    setFolder([...folders, newFolder]);
+    const newFolder = { id: Date.now(), name: folderName, quotes: []};
+    setFolders([...folders, newFolder]);
     setFolderName("");
     setCreating(false);
     };
-
-   const saveToFolder = (folder) => {
-      const updated = folders.map((f) => 
-      f.id === folder.id ? {...f,quotes: [...f.quote, {quote, by}]} : f);
-      setFolder(updated);
-      setModalVisible(false);
-   }
 
   const handelShare = async (quoteText, author) => {
         try{
@@ -65,7 +58,10 @@ export default function QuoteLibraryQuoteCard({ quote, by, background, onCustomi
 
        {/* action buttons */}
         <View style={styles.actionBar}>
-          <TouchableOpacity onPress={() => setLiked(!liked)}>
+          <TouchableOpacity onPress={() => {
+            setLiked(!liked);
+            handelLike({quote, by});
+          }}>
             <Ionicons 
               name={liked ? "heart" : "heart-outline"} 
               size={20} 
@@ -107,7 +103,9 @@ export default function QuoteLibraryQuoteCard({ quote, by, background, onCustomi
                             renderItem={({ item }) => (
                               <TouchableOpacity
                                 style={styles.folderItem}
-                                onPress={() => saveToFolder(item)}
+                                onPress={() => {
+                                  addQuoteToFolder(item.name, {quote, by});
+                                  setModalVisible(false);}}
                               >
                                 <Feather name="folder" size={18} color="#555" />
                                 <Text style={styles.folderName}>{item.name}</Text>
