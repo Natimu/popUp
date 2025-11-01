@@ -1,17 +1,25 @@
-// src/components/QuoteCard.js
+
 import { Ionicons, Feather, AntDesign } from "@expo/vector-icons";
-import React, { useState, useContext} from "react";
+import React, { useState, useContext, useEffect} from "react";
 import { FoldersContext } from "../context/FolderContext";
 import { View, Text, StyleSheet, TouchableOpacity, ImageBackground, Share, Modal, TextInput,FlatList } from "react-native";
 import * as Clipboard from "expo-clipboard";
 import * as Speech from "expo-speech";
 
-export default function QuoteLibraryQuoteCard({ quote, by, background, onCustomize }) {
+export default React.memo(function QuoteLibraryQuoteCard({ quote, by, background, onCustomize }) {
   const [liked, setLiked] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
   const [creating, setCreating] = useState(false);
   const [folderName, setFolderName] = useState("");
   const { folders, setFolders, handelLike, addQuoteToFolder, removeQuoteFromFolder } = useContext(FoldersContext);
+
+  useEffect(() => {
+    const favorites = folders.find(f => f.name === "Favorites");
+    const isFavorites = favorites?.quotes?.some(
+      q => q.quote === quote && q.by === by
+    );
+    setLiked(isFavorites);
+  }, [folders]);
 
 
    const createFolder = () =>{
@@ -153,7 +161,7 @@ export default function QuoteLibraryQuoteCard({ quote, by, background, onCustomi
       </ImageBackground>
     </TouchableOpacity>
   );
-}
+});
 
 const styles = StyleSheet.create({
   cardContainer: {

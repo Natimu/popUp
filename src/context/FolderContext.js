@@ -1,4 +1,4 @@
-import React, {createContext, useState,useEffect} from "react";
+import React, {createContext, useState,useEffect, useMemo} from "react";
 import AsyncStorage  from "@react-native-async-storage/async-storage";
 
 export const FoldersContext = createContext();
@@ -6,7 +6,8 @@ export const FoldersContext = createContext();
 export const FoldersProvider = ({children}) => {
     const [folders, setFolders] = useState([]);
 
-    {/* useEffect(()=>{
+    {/* // remove all folders
+        useEffect(()=>{
         const cleanOldFolders = async () => {
             try{
                 await AsyncStorage.removeItem("folders");
@@ -107,14 +108,17 @@ export const FoldersProvider = ({children}) => {
         else addQuoteToFolder("Favorites", quoteFile);
     }
 
+    const value = useMemo(() => ({
+        folders, 
+        setFolders, 
+        addQuoteToFolder, 
+        removeQuoteFromFolder, 
+        handelLike
+    }), [folders]);
+
 
     return (
-        <FoldersContext.Provider value={{
-            folders, 
-            setFolders, 
-            addQuoteToFolder, 
-            removeQuoteFromFolder, 
-            handelLike}}>
+        <FoldersContext.Provider value={value}>
             {children}
         </FoldersContext.Provider>
     );
