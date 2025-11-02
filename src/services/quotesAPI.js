@@ -29,20 +29,20 @@ export async function fetchQuotes(type, count){
         return data.map((q, index) => (
             {
                 id: q.id ?? index,
-                text: `${q.text}`,
+                quote: `${q.text}`,
                 by: `${q.by}`,
             }));
     case "MOTIVATION":
         return data.map((q, index) => ({
             id: index,
-            text: `${q.q}`,
+            quote: `${q.q}`,
             by: `${q.a}`,
         }));
 
     default:
         return data.map((q, index) => ({
             id: index,
-            text: q.text || q.q || q.content || "",
+            quote: q.text || q.q || q.content || "",
             by: q.by || q.a || q.author || "",
         }));
   }

@@ -67,6 +67,7 @@ export default function FavoritesScreen({navigation}){
                         <TouchableOpacity
                         style={styles.folderItem}
                         onPress={() => {
+                            navigation.navigate("Folder Quote Display", {folderId: item.id})
                             }}
                         >
                         <Feather name={item.name === "Favorites" ? "heart": "folder"} size={18} color={item.name === "Favorites" ? "#e63946": "#555"} />

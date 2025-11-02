@@ -1,15 +1,23 @@
 import React, {useCallback} from "react";
 import {FlatList, StyleSheet} from "react-native";
 import QuoteLibraryQuoteCard from "./QuoteLibraryQuoteCard";
+import FolderLibraryQuoteCard from "./FolderLibraryQuoteCard";
 import { View, ActivityIndicator } from "react-native";
 
 
-export default function QuoteList({quotes, category, onEndReached, loadingMore}){
+export default function QuoteList({quotes, cardType, onRemoveQuote, onEndReached, loadingMore}){
     const renderItem = useCallback(
-    ({ item }) => (
-      <QuoteLibraryQuoteCard quote={item.text} by={item.by} />
-    ),
-    [] // Only recreate if absolutely necessary (no deps)
+    ({ item }) => {
+        const quoteText = item.text || item.quote;
+        const quoteBy = item.by;
+
+        if(cardType === "folder"){
+            return <FolderLibraryQuoteCard quote={quoteText} by={quoteBy} onRemove={() => onRemoveQuote(item)}/>
+        }
+        
+      return <QuoteLibraryQuoteCard quote={quoteText} by={quoteBy} />
+    },
+    [cardType] // Only recreate if absolutely necessary (no deps)
   );
 
     return(
