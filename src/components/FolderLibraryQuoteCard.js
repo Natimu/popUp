@@ -3,7 +3,7 @@ import { Ionicons, Feather, AntDesign, MaterialCommunityIcons} from "@expo/vecto
 import React, { useState, useContext, useEffect} from "react";
 import { Alert } from "react-native";
 import { FoldersContext } from "../context/FolderContext";
-import { View, Text, StyleSheet, TouchableOpacity, ImageBackground, Share, Modal, TextInput,FlatList } from "react-native";
+import { Animated, View, Text, StyleSheet, TouchableOpacity, ImageBackground, Share, Modal, TextInput,FlatList } from "react-native";
 import * as Clipboard from "expo-clipboard";
 import * as Speech from "expo-speech";
 
@@ -74,6 +74,13 @@ export default React.memo(function FolderLibraryQuoteCard({ quote, by, onRemove,
     );
   };
 
+  const renderRightActions = (progress, dragX) => {
+    const scale = dragX.interpolate({
+      inputRange: [-100, 0],
+      outputRange: [1, 0],
+      extrapolate: 'clamp',
+    });
+
   return (
     <TouchableOpacity onPress={onCustomize} style={styles.cardContainer}>
       <ImageBackground
@@ -90,11 +97,12 @@ export default React.memo(function FolderLibraryQuoteCard({ quote, by, onRemove,
             setLiked(!liked);
             handelLike({quote, by});
           }}>
-            <Ionicons 
+              <Ionicons 
               name={liked ? "heart" : "heart-outline"} 
               size={20} 
               color={liked ? "#e63946" : "#555"}/>
             <Text>Like</Text>
+          
           </TouchableOpacity>
           <TouchableOpacity style={styles.actionButtons} onPress={() => handelShare(quote, by)}>
             <Feather name="share" size={20} color={"#333"}/>
@@ -113,7 +121,7 @@ export default React.memo(function FolderLibraryQuoteCard({ quote, by, onRemove,
             <Text>Add</Text>
           </TouchableOpacity>
           <TouchableOpacity style={styles.actionButtons} onPress={confirmRemove}>
-            <MaterialCommunityIcons name="delete-alert-outline" size={20} color={"#333"}/>
+            <Feather name="trash" size={20} color={"#333"}/>
             <Text>Remove</Text>
           </TouchableOpacity>
 
