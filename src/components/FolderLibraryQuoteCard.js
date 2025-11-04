@@ -74,13 +74,7 @@ export default React.memo(function FolderLibraryQuoteCard({ quote, by, onRemove,
     );
   };
 
-  const renderRightActions = (progress, dragX) => {
-    const scale = dragX.interpolate({
-      inputRange: [-100, 0],
-      outputRange: [1, 0],
-      extrapolate: 'clamp',
-    });
-
+ 
   return (
     <TouchableOpacity onPress={onCustomize} style={styles.cardContainer}>
       <ImageBackground
@@ -102,7 +96,7 @@ export default React.memo(function FolderLibraryQuoteCard({ quote, by, onRemove,
               size={20} 
               color={liked ? "#e63946" : "#555"}/>
             <Text>Like</Text>
-          
+             
           </TouchableOpacity>
           <TouchableOpacity style={styles.actionButtons} onPress={() => handelShare(quote, by)}>
             <Feather name="share" size={20} color={"#333"}/>
