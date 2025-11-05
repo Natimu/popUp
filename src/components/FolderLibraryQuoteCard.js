@@ -1,11 +1,13 @@
 
 import { Ionicons, Feather, AntDesign, MaterialCommunityIcons} from "@expo/vector-icons";
-import React, { useState, useContext, useEffect} from "react";
+import React, { useState, useContext, useEffect, useRef} from "react";
 import { Alert } from "react-native";
 import { FoldersContext } from "../context/FolderContext";
 import { Animated, View, Text, StyleSheet, TouchableOpacity, ImageBackground, Share, Modal, TextInput,FlatList } from "react-native";
+import { Swipeable } from "react-native-gesture-handler";
 import * as Clipboard from "expo-clipboard";
 import * as Speech from "expo-speech";
+
 
 export default React.memo(function FolderLibraryQuoteCard({ quote, by, onRemove, background, onCustomize }) {
   const [liked, setLiked] = useState(false);
@@ -13,6 +15,7 @@ export default React.memo(function FolderLibraryQuoteCard({ quote, by, onRemove,
   const [creating, setCreating] = useState(false);
   const [folderName, setFolderName] = useState("");
   const { folders, setFolders, handelLike, addQuoteToFolder } = useContext(FoldersContext);
+  const swieableRef = useRef(null);
 
   useEffect(() => {
     const favorites = folders.find(f => f.name === "Favorites");
@@ -67,16 +70,48 @@ export default React.memo(function FolderLibraryQuoteCard({ quote, by, onRemove,
         {
           text: "Remove",
           style: "destructive",
-          onPress: onRemove,
+          onPress: ()=> {
+            
+            onRemove();
+            swieableRef.current?.close();
+           
+          },
         }
       ],
       {cancelable: true}
     );
   };
 
+  const renderRightActions = (progress, dragX) => {
+    const scale = dragX.interpolate({
+      inputRange: [-100, 0],
+      outputRange: [1, 0],
+      extrapolate: 'clamp',
+    });
+
+    return (
+      <TouchableOpacity
+        onPress={confirmRemove}
+        style={{
+          backgroundColor: '#e63946',
+          justifyContent: 'center',
+          alignItems: "stretch",
+          paddingHorizontal: 20,
+          marginVertical: 12,
+          borderRadius: 16,
+        }}
+      >
+        <Animated.View style={{ transform: [{ scale }] }}>
+          <Feather name="trash" size={24} color="#fff" />
+        </Animated.View>
+      </TouchableOpacity>
+    );
+  };
+
  
   return (
-    <TouchableOpacity onPress={onCustomize} style={styles.cardContainer}>
+    <Swipeable ref = {swieableRef} renderRightActions = {renderRightActions}>
+       <TouchableOpacity onPress={onCustomize} style={styles.cardContainer}>
       <ImageBackground
         source={background ? { uri: background } : null}
         style={[styles.card, background ? { backgroundColor: "transparent" } : styles.defaultBackground]}
@@ -186,6 +221,8 @@ export default React.memo(function FolderLibraryQuoteCard({ quote, by, onRemove,
         </View>
       </ImageBackground>
     </TouchableOpacity>
+    </Swipeable>
+   
   );
 });
 

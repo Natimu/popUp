@@ -6,7 +6,7 @@ import FavoritesScreen from "../screens/FavoritesScreen";
 import OnboardingScreen from "../screens/OnboardingScreen";
 import WidgetPreview from "../components/WidgetPreview"
 import QuoteLibraryScreen from "../screens/QuoteLibraryScreen";
-import FavoritesScreenQuoteDis from "../screens/FolderQuotesScreen";
+import WidgetDisplay from "../screens/WidgetDisplay"
 import FolderQuotesScreen from "../screens/FolderQuotesScreen";
 
 
@@ -18,6 +18,7 @@ export default function AppNavigator() {
       <Stack.Screen name="Onboarding" component={OnboardingScreen} />
       <Stack.Screen name="Home" component={HomeScreen} />
       <Stack.Screen name="Widget Settings" component={WidgetSettingsScreen} />
+      <Stack.Screen name="Widget Display" component={WidgetDisplay} />
       <Stack.Screen name="Favorites" component={FavoritesScreen} />
       <Stack.Screen name="Widget Preview" component={WidgetPreview}/>
       <Stack.Screen name= "Quote Library" component={QuoteLibraryScreen}/>

@@ -55,7 +55,7 @@ export default function SideMenu({ visible, onClose, navigation }) {
               <Text style={styles.menuItem}>Favorites</Text>
             </TouchableOpacity>
             
-            <TouchableOpacity style={styles.menuList} onPress={() => handelNavigate("Favorites")}>
+            <TouchableOpacity style={styles.menuList} onPress={() => handelNavigate("Widget Display")}>
                 <MaterialIcons name="settings-display" size={20} color={"#111415ff"}/>
               <Text style={styles.menuItem}>Widget Display</Text>
             </TouchableOpacity>
