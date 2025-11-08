@@ -17,8 +17,14 @@ export async function sendQuoteNotification (quote){
         await Notifications.scheduleNotificationAsync({
             content: {
                 title: "Quote time", 
-                body: `${quote.te}`
-            }
-        })
+                body: `${quote.quote}${quote.by ? "-" + quote.by : ""}`,
+                sound: false,
+                priority: Notifications.AndroidNotificationPriority.HIGH,
+
+            },
+            trigger: null,
+        });
+    } catch (error){
+        console.log('Error sending notification', error);
     }
 }

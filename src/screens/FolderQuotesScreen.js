@@ -1,11 +1,11 @@
-import React , {useContext, useState} from "react";
+import React , {useContext, useState, useEffect} from "react";
 import { View, ActivityIndicator, StyleSheet} from "react-native";
 import { useRoute } from "@react-navigation/native";
 import SideMenu from "../components/SideMenu";
 import AppHeader from "../components/AppHeader";
 import QuoteList from "../components/QuoteLists";
 import { FoldersContext } from "../context/FolderContext";
-import { quoteAPI_list } from "../utils/constants";
+
 
 
 export default function FolderQuotesScreen({navigation}){
@@ -16,8 +16,6 @@ export default function FolderQuotesScreen({navigation}){
     
 
     const removeQuote = (quoteFile) => removeQuoteFromFolder(folder.name, quoteFile);
-    
-    
 
     return(
         <View style={styles.container}>
