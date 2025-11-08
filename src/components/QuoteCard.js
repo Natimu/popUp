@@ -1,6 +1,6 @@
 // src/components/QuoteCard.js
 import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity, ImageBackground } from "react-native";
+import { Text, StyleSheet, TouchableOpacity, ImageBackground } from "react-native";
 
 export default function QuoteCard({ title, quote, by, background, onCustomize }) {
   return (
