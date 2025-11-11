@@ -115,7 +115,7 @@ export default React.memo(function QuoteLibraryQuoteCard({ quote, by, background
                                   addQuoteToFolder(item.name, {quote, by});
                                   setModalVisible(false);}}
                               >
-                                <Feather name="folder" size={18} color="#555" />
+                                <Feather name={item.name === "Favorites" ? "heart": "folder"} size={18} color= {item.name === "Favorites" ? "#e63946": "#555" }/>
                                 <Text style={styles.folderName}>{item.name}</Text>
                               </TouchableOpacity>
                             )}
@@ -145,12 +145,27 @@ export default React.memo(function QuoteLibraryQuoteCard({ quote, by, background
                         <TouchableOpacity style={styles.saveBtn} onPress={createFolder}>
                           <Text style={styles.saveBtnText}>Save Folder</Text>
                         </TouchableOpacity>
+
+                        <TouchableOpacity
+                          style={styles.cancelBtn}
+                          onPress={() => {
+                            setCreating(false);
+                          } 
+                          }
+                        >
+                          <Text style={styles.cancelBtnText}>Cancel</Text>
+                        </TouchableOpacity>
                       </View>
+                      
                     )}
 
                     <TouchableOpacity
                       style={styles.closeBtn}
-                      onPress={() => setModalVisible(false)}
+                      onPress={() => {
+                        setModalVisible(false);
+                        setCreating(false);
+                      }  
+                      }
                     >
                       <Text style={styles.closeText}>Close</Text>
                     </TouchableOpacity>
@@ -229,7 +244,15 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     alignItems: "center",
   },
+  cancelBtn:{
+    backgroundColor: "#ef4444ff",
+    padding: 10,
+    borderRadius: 8,
+    alignItems: "center",
+    marginTop: 10,
+  },
   saveBtnText: { color: "#fff", fontWeight: "bold" },
+  cancelBtnText: { color: "#fff", fontWeight: "bold" },
   closeBtn: { alignSelf: "center", marginTop: 12 },
   closeText: { color: "#555" },
 });
