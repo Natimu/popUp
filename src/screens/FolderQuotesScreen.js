@@ -1,5 +1,5 @@
 import React , {useContext, useState, useEffect} from "react";
-import { View, ActivityIndicator, StyleSheet} from "react-native";
+import { View, StyleSheet} from "react-native";
 import { useRoute } from "@react-navigation/native";
 import SideMenu from "../components/SideMenu";
 import AppHeader from "../components/AppHeader";

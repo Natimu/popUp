@@ -3,7 +3,7 @@ import { View, Text, StyleSheet } from "react-native";
 import Slider from "@react-native-community/slider";
 
 export default function DurationSlider({ onChange }) {
-  const [interval, setInterval] = useState(1800); // default 30 min
+  const [interval, setInterval] = useState(60); // default 30 min
 
   const formatTime = (sec) => {
     const min = Math.floor(sec / 60);
@@ -18,7 +18,7 @@ export default function DurationSlider({ onChange }) {
       <Text style={styles.label}>Update every {formatTime(interval)}</Text>
       <Slider
         style={{ width: "100%" }}
-        minimumValue={300}
+        minimumValue={60}
         maximumValue={14400}
         step={60}
         minimumTrackTintColor="#6200EE"

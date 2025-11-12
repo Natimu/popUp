@@ -1,17 +1,23 @@
 import React, { useState, useContext } from "react";
 import { View, Text, TouchableOpacity, Modal, FlatList, StyleSheet, Button} from "react-native";
 import { FoldersContext } from "../context/FolderContext";
-import Slider from "@react-native-community/slider";
+import AppHeader from "../components/AppHeader";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import DurationSlider from "../components/DurationSlider";
+import SideMenu from "../components/SideMenu";
 
 
-export default function WidgetSettingsScreen() {
+
+
+
+export default function WidgetSettingsScreen({navigation}) {
   const { folders } = useContext(FoldersContext);
   const [selectedFolder, setSelectedFolder] = useState(null);
   const [interval, setInterval] = useState(1800);
+
   const [showFolders, setShowFolders] = useState(false);
   const [showIntervals, setShowIntervals] = useState(false);
+  const [menuVisible, setMenuVisible] = useState(false);
 
   const formatTime = (sec) => {
     const min = Math.floor(sec / 60);
@@ -33,99 +39,117 @@ export default function WidgetSettingsScreen() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Widget Settings</Text>
-
-      
-      <TouchableOpacity style={styles.selector} onPress={() => setShowFolders(true)}>
-        <Text>{selectedFolder || "Select Folder"}</Text>
-      </TouchableOpacity>
-
-      <Modal 
-      visible={showFolders} 
-      animationType="slide"
-      transparent
-      onRequestClose={() => setShowFolders(false)}>
-        <View style = {styles.modalOverlay}>
-            <View style = {styles.modalContent}>
-                <FlatList
-                    data={folders}
-                    keyExtractor={item => item.id.toString()}
-                    renderItem={({ item }) => (
-                        <TouchableOpacity
-                        style={styles.item}
-                        onPress={() => {
-                            setSelectedFolder(item.name);
-                            setShowFolders(false);
-                        }}
-                        >
-                        <Text>{item.name}</Text>
-                        </TouchableOpacity>
-                    )}
-                    />
-                    <TouchableOpacity
-                        style={styles.closeBtn}
-                        onPress={() => setShowFolders(false)}
-                    >
-                        <Text style={styles.closeText}>Close</Text>
-                    </TouchableOpacity>
-            </View>
-        </View>
+            
+      <AppHeader onMenuPress={() => {
+              setMenuVisible(true)}} 
+              headerText={"Widget Settings"}
+        />
         
-      </Modal>
 
-      {/* Interval Picker */}
-      <TouchableOpacity style={styles.selector} onPress={() => setShowIntervals(true)}>
-        <Text style={styles.label}>Update every {formatTime(interval)}
-        </Text>
-      </TouchableOpacity>
+        <View style={styles.component}>
+        <TouchableOpacity style={styles.selector} onPress={() => setShowFolders(true)}>
+            <Text>{selectedFolder || "Select Folder"}</Text>
+        </TouchableOpacity>
 
-      <Modal visible={showIntervals} animationType="fade" transparent>
-        <View style={styles.modalOverlay}>
-          <View style={styles.modalContent}>
-                <View style={{ marginTop: 30 }}>
-                    <DurationSlider
-                        onChange={(seconds) => {
-                        setInterval(seconds);
+        <Modal 
+        visible={showFolders} 
+        animationType="slide"
+        transparent
+        onRequestClose={() => setShowFolders(false)}>
+            <View style = {styles.modalOverlay}>
+                <View style = {styles.modalContent}>
+                    <FlatList
+                        data={folders}
+                        keyExtractor={item => item.id.toString()}
+                        renderItem={({ item }) => (
+                            <TouchableOpacity
+                            style={styles.item}
+                            onPress={() => {
+                                setSelectedFolder(item.name);
+                                setShowFolders(false);
+                            }}
+                            >
+                            <Text>{item.name}</Text>
+                            </TouchableOpacity>
+                        )}
+                        />
+                        <TouchableOpacity
+                            style={styles.closeBtn}
+                            onPress={() => setShowFolders(false)}
+                        >
+                            <Text style={styles.closeText}>Close</Text>
+                        </TouchableOpacity>
+                </View>
+            </View>
+            
+        </Modal>
+
+        {/* Interval Picker */}
+        <TouchableOpacity style={styles.selector} onPress={() => setShowIntervals(true)}>
+            <Text style={styles.label}>Will render every {formatTime(interval)}
+            </Text>
+        </TouchableOpacity>
+
+        <Modal visible={showIntervals} animationType="slide" transparent>
+            <View style={styles.modalOverlay}>
+            <View style={styles.modalContent}>
+                    <View style={{ marginTop: 30 }}>
+                        <DurationSlider
+                            onChange={(seconds) => {
+                            setInterval(seconds);
+                            
+                            }}
+                        />
+                        <View style= {styles.buttonTimeIntervalOptions}>
+                            <TouchableOpacity style= {styles.optionTimeInterval} onPress={() => {setInterval(1800); setShowIntervals(false)
+                            }}>
+                                <Text style={{ color: "#6200EE", fontWeight: "600" }}>30 min</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style= {styles.optionTimeInterval} onPress={() => {setInterval(3600); setShowIntervals(false)
+                            }}>
+                                <Text style={{ color: "#6200EE", fontWeight: "600" }}>1 hour</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style= {styles.optionTimeInterval} onPress={() => {setInterval(7200); setShowIntervals(false)
+                            }}>
+                                <Text style={{ color: "#6200EE", fontWeight: "600" }}>2 hour</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style= {styles.optionTimeInterval} onPress={() => {setInterval(18000); setShowIntervals(false)
+                            }}>
+                                <Text style={{ color: "#6200EE", fontWeight: "600" }}>5 hour</Text>
+                            </TouchableOpacity>
+                        </View>
                         
-                        }}
-                    />
-                    <View style= {styles.buttonTimeIntervalOptions}>
-                        <TouchableOpacity style= {styles.optionTimeInterval} onPress={() => {setInterval(1800); setShowIntervals(false)
-                        }}>
-                            <Text style={{ color: "#6200EE", fontWeight: "600" }}>30 min</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style= {styles.optionTimeInterval} onPress={() => {setInterval(3600); setShowIntervals(false)
-                        }}>
-                            <Text style={{ color: "#6200EE", fontWeight: "600" }}>1 hour</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style= {styles.optionTimeInterval} onPress={() => {setInterval(7200); setShowIntervals(false)
-                        }}>
-                            <Text style={{ color: "#6200EE", fontWeight: "600" }}>2 hour</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style= {styles.optionTimeInterval} onPress={() => {setInterval(18000); setShowIntervals(false)
-                        }}>
-                            <Text style={{ color: "#6200EE", fontWeight: "600" }}>5 hour</Text>
-                        </TouchableOpacity>
-                    </View>
-                    
-                    </View>
-            <TouchableOpacity
-                style={styles.closeBtn}
-                onPress={() => setShowIntervals(false)}
-            >
-                <Text style={styles.closeText}>Close</Text>
-            </TouchableOpacity>
-          </View>
+                        </View>
+                <TouchableOpacity
+                    style={styles.closeBtn}
+                    onPress={() => setShowIntervals(false)}
+                >
+                    <Text style={styles.closeText}>Close</Text>
+                </TouchableOpacity>
+            </View>
+            </View>
+        </Modal>
+        <Button title="Save Settings" onPress={saveSettings}/>
+        
         </View>
-      </Modal>
-      <Button title="Save Settings" onPress={saveSettings}/>
+    <SideMenu
+        visible={menuVisible}
+        onClose={()=> setMenuVisible(false)}
+        navigation={navigation}
+        />
     </View>
+    
   );
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 20, gap: 16 },
-  title: { fontSize: 20, fontWeight: "600" },
+  container: {
+        flex: 1,
+        backgroundColor: "#F9F7FF",
+        paddingBottom: 20,
+        
+    },
+  component: {padding: 20, gap: 16 },
   selector: { padding: 12, borderRadius: 8, borderWidth: 1, borderColor: "#ccc" },
   item: { padding: 15, borderBottomWidth: 1, borderColor: "#eee" },
  modalOverlay: {
