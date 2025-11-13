@@ -13,7 +13,7 @@ import SideMenu from "../components/SideMenu";
 export default function WidgetSettingsScreen({navigation}) {
   const { folders } = useContext(FoldersContext);
   const [selectedFolder, setSelectedFolder] = useState(null);
-  const [interval, setInterval] = useState(1800);
+  const [interval, setInterval] = useState(60); /////////////////////////////////////////////////////////////////////////////////////////////////////
 
   const [showFolders, setShowFolders] = useState(false);
   const [showIntervals, setShowIntervals] = useState(false);

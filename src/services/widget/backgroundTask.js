@@ -11,6 +11,7 @@ TaskManager.defineTask(TASK_NAME, async () => {
         const settingsRaw = await AsyncStorage.getItem('widgetSettings');
         const settings = JSON.parse(settingsRaw || {});
         const quote = await getRandomQuote(settings);
+        console.log("Notification settings:", settings);
 
         if (!quote) return BackgroundFetch.BackgroundFetchResult.NoData;
 
@@ -22,7 +23,7 @@ TaskManager.defineTask(TASK_NAME, async () => {
     }
 });
 
-export async function registerQuoteBackgroundTask(interval = 1800) {
+export async function registerQuoteBackgroundTask(interval = 60) {/////////////////////////////////////////////////////////////////////////////////////////////
 
     try{
         const registered = await TaskManager.isTaskRegisteredAsync(TASK_NAME);

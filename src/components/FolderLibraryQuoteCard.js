@@ -73,7 +73,7 @@ export default React.memo(function FolderLibraryQuoteCard({ quote, by, onRemove,
           onPress: ()=> {
             
             onRemove();
-            swieableRef.current?.close();
+            swipeableRef.current?.close();
            
           },
         }
@@ -110,7 +110,7 @@ export default React.memo(function FolderLibraryQuoteCard({ quote, by, onRemove,
 
  
   return (
-    <Swipeable ref = {swieableRef} renderRightActions = {renderRightActions}>
+    <Swipeable ref = {swipeableRef} renderRightActions = {renderRightActions}>
        <TouchableOpacity onPress={onCustomize} style={styles.cardContainer}>
       <ImageBackground
         source={background ? { uri: background } : null}

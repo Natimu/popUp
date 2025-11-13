@@ -18,7 +18,7 @@ export default function DurationSlider({ onChange }) {
       <Text style={styles.label}>Update every {formatTime(interval)}</Text>
       <Slider
         style={{ width: "100%" }}
-        minimumValue={60}
+        minimumValue={1000}
         maximumValue={14400}
         step={60}
         minimumTrackTintColor="#6200EE"
