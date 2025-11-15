@@ -15,7 +15,7 @@ export default React.memo(function FolderLibraryQuoteCard({ quote, by, onRemove,
   const [creating, setCreating] = useState(false);
   const [folderName, setFolderName] = useState("");
   const { folders, setFolders, handelLike, addQuoteToFolder } = useContext(FoldersContext);
-  const swieableRef = useRef(null);
+  const swipeableRef = useRef(null);
 
   useEffect(() => {
     const favorites = folders.find(f => f.name === "Favorites");
